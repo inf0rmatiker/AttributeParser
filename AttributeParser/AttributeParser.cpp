@@ -9,38 +9,11 @@
 #include <fstream>
 #include <regex>
 
+// Non-STL includes
+#include "Attribute.h"
+#include "Tag.h"
+
 using namespace std;
-
-class Attribute {
-public:
-	// Constructors
-	Attribute(string attrName, string attrVal) : name(attrName), value(attrVal) {}
-	Attribute(string attrName) { Attribute(attrName, ""); }
-	Attribute() { Attribute(""); }
-
-	~Attribute() = default;
-	string name, value;
-};
-
-class Tag {
-public:
-	Tag() { Tag(""); }
-	Tag(string tagName) : name(tagName) {}
-	~Tag() = default;
-
-	string getAttributesAsString() {
-		string attributesStr = "";
-		for (unsigned int i = 0; i < attributes.size(); i++) {
-			attributesStr += attributes[i].name + " = \"" + attributes[i].value + "\"";
-		}
-
-		return attributesStr;
-	}
-
-	string name;
-	vector<Attribute> attributes;
-	vector<Tag> children;
-};
 
 string formatValue(string value) {
 	if (!value.find(">")) {
@@ -187,7 +160,7 @@ string queryTags(string query, vector<Tag> tags) {
 }
 
 int main() {
-	ifstream fileIn("tags_test_0.txt");
+	ifstream fileIn("attributes_test_0.txt");
 	string line;
 
 	vector<Tag> tags = parseTag(fileIn);

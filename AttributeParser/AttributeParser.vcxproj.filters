@@ -23,5 +23,16 @@
     <Text Include="tags_test_0.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="attributes_test_0.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Attribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
