@@ -165,12 +165,5 @@ int main() {
 
 	vector<Tag> tags = parseTag(fileIn);
 	printStructure(tags);
-	/*
-	for (int i = 0; i < queries; i++) {
-		getline(fileIn, line);
-		string queryResult = queryTags(line, tags);
-		cout << queryResult << '\n';
-	}
-	*/
 	return 0;
 }
