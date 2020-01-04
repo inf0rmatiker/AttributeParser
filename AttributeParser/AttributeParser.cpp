@@ -22,6 +22,7 @@ string formatValue(string value) {
 	return value.substr(1, value.size() - 1);
 }
 
+/* Takes a single opening tag line, and parses the attributes out of it. */
 vector<Attribute> parseAttributes(istringstream &iss) {
 	vector<Attribute> attributes;
 	while (iss) {
@@ -55,6 +56,7 @@ vector<Attribute> parseAttributes(istringstream &iss) {
 	return attributes;
 }
 
+/* Recursively populates a std::vector of Tag objects for each level. */
 vector<Tag> parseTag(ifstream &fileIn) {
 	vector<Tag> tagList;
 	string line;
@@ -163,6 +165,8 @@ int main() {
 	ifstream fileIn("attributes_test_0.txt");
 	string line;
 
+	// We use a std::vector here, because even though it has O(n) lookup
+	// time, it preserves the order of the tags unlike a map.
 	vector<Tag> tags = parseTag(fileIn);
 	printStructure(tags);
 	return 0;
