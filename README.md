@@ -10,6 +10,7 @@ tags may be placed on the same level.
 
 The tags' format is specified as follows:
 - `<tagName>` if the tag has no attributes
-- `<tagName ` followed by a space character, followed by attributes
+- `<tagName attributeName = "attributeValue">` if the tag has attributes
+
 
 **NOTE**: This does NOT support true HTML yet, much work has to be done to support even basic syntax.
