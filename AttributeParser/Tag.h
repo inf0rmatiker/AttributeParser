@@ -4,20 +4,14 @@
 #include <vector>
 #include "Attribute.h"
 
+/* Represents a tag. Contains a list of attributes, and children Tag objects. */
 class Tag {
 public:
-	Tag() { Tag(""); }
-	Tag(std::string tagName) : name(tagName) {}
+	Tag();
+	Tag(std::string);
 	~Tag() = default;
 
-	std::string getAttributesAsString() {
-		std::string attributesStr = "";
-		for (unsigned int i = 0; i < attributes.size(); i++) {
-			attributesStr += attributes[i].name + " = \"" + attributes[i].value + "\"";
-		}
-
-		return attributesStr;
-	}
+	std::string getAttributesAsString();
 
 	std::string name;
 	std::vector<Attribute> attributes;

@@ -3,12 +3,14 @@
 #include <vector>
 #include <string>
 
+/* Represents a single (name, value) attribute of a tag.
+   Definitions provided in Attribute.cpp.
+*/
 class Attribute {
 public:
-	// Constructors
-	Attribute(std::string attrName, std::string attrVal) : name(attrName), value(attrVal) {}
-	Attribute(std::string attrName) { Attribute(attrName, ""); }
-	Attribute() { Attribute(""); }
+	Attribute(std::string attrName, std::string attrVal);
+	Attribute(std::string attrName);
+	Attribute();
 
 	~Attribute() = default;
 	std::string name, value;
