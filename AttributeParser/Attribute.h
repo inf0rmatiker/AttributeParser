@@ -8,8 +8,8 @@
 */
 class Attribute {
 public:
-	Attribute(std::string attrName, std::string attrVal);
-	Attribute(std::string attrName);
+	Attribute(std::string, std::string);
+	Attribute(std::string);
 	Attribute();
 
 	~Attribute() = default;
