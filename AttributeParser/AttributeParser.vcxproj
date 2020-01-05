@@ -151,10 +151,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="AttributeParser.cpp" />
+    <ClCompile Include="Tag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="attributes_test_0.txt" />
     <Text Include="tags_test_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Attribute.h" />
+    <ClInclude Include="Tag.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
