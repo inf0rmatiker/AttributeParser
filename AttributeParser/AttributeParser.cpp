@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <fstream>
 #include <regex>
+#include <ctype.h>
+#include <exception>
 
 // Non-STL includes
 #include "Attribute.h"
@@ -15,6 +17,8 @@
 
 using namespace std;
 
+/* Strips the quotation marks off the attribute value.
+	Also removes ending '>', if included. */
 string formatValue(string value) {
 	if (!value.find(">")) {
 		return value.substr(1, value.size() - 2);
@@ -22,38 +26,83 @@ string formatValue(string value) {
 	return value.substr(1, value.size() - 1);
 }
 
+/* Gets the stream iterator to the first
+	non-whitespace character. */
+void skipWhiteSpace(istringstream &iss) {
+	char c;
+	while (iss.get(c)) {
+		if (!isspace(c)) {
+			iss.putback(c);
+			return;
+		}
+	}
+}
+
+string readAttributeName(istringstream &iss) {
+	string name = "";
+	char c;
+	while (iss.get(c)) {
+		if (c != '=') {
+			name += c;
+		}
+		else {
+			iss.get(c);
+			if (c == '"') {
+				break;
+			}
+			else {
+				throw logic_error("Malformed attribute: " + name);
+			}
+		}
+	}
+	return name;
+}
+
+string readAttributeValue(istringstream &iss) {
+	string value = "";
+	char c;
+	while (iss.get(c)) {
+		if (c == '"') {
+			break;
+		}
+		else {
+			value += c;
+		}
+	}
+	return value;
+}
+
+/* Reads a single attribute (e.g. name="value") from the istringstream
+	and returns it as an Attribute object. */
+Attribute readAttribute(istringstream &iss) {
+	skipWhiteSpace(iss);
+	try {
+		string name = readAttributeName(iss);
+		string value = readAttributeValue(iss);
+		return Attribute(name, value);
+	}
+	catch (const logic_error &e) {
+		throw e;
+	}
+}
+
 /* Takes a single opening tag line, and parses the attributes out of it. */
 vector<Attribute> parseAttributes(istringstream &iss) {
 	vector<Attribute> attributes;
 	while (iss) {
-		string name, value;
-		char equalSign, currentChar;
-		iss >> name >> equalSign;
-
-		if (equalSign == '=') { // Error check
-			iss.get(currentChar); iss.get(currentChar); // Read space char and "
-			if (currentChar == '"') {
-				while (iss.get(currentChar)) {
-					if (currentChar == '"') {
-						break;
-					}
-					else {
-						value += currentChar;
-					}
-				}
-			}
-			else { cout << "Incorrect attribute format!\n"; }
-
-		}
-		else { cout << "Incorrect attribute format!\n"; }
-		attributes.push_back(Attribute(name, value));
-		iss.get(currentChar);
-		if (currentChar == '>') {
+		// Test for ending '>'
+		skipWhiteSpace(iss);
+		char c; iss.get(c);
+		if (c == '>') {
 			return attributes;
+		} 
+		else {
+			iss.putback(c);
+			attributes.push_back(readAttribute(iss));
 		}
 	}
 
-	return attributes;
+	throw logic_error("No closing '>' found on line!");
 }
 
 /* Recursively populates a std::vector of Tag objects for each level. */
@@ -81,11 +130,24 @@ vector<Tag> parseTag(ifstream &fileIn) {
 			}
 			else { // Tag has attributes
 				tagName = tagName.substr(1);
-				currentTag.attributes = parseAttributes(iss);
+				try {
+					currentTag.attributes = parseAttributes(iss);
+				}
+				catch (const logic_error &e) {
+					throw e;
+				}
 			}
 
 			currentTag.name = tagName;
-			currentTag.children = parseTag(fileIn);
+
+			// Recursive call; throw any exceptions up the call stack
+			try {
+				currentTag.children = parseTag(fileIn);
+			}
+			catch (const logic_error &e) {
+				throw e;
+			}
+			
 			tagList.push_back(currentTag); // Push new tag
 		}
 	}
@@ -167,7 +229,15 @@ int main() {
 
 	// We use a std::vector here, because even though it has O(n) lookup
 	// time, it preserves the order of the tags unlike a map.
-	vector<Tag> tags = parseTag(fileIn);
-	printStructure(tags);
+	try {
+		vector<Tag> tags = parseTag(fileIn);
+		printStructure(tags);
+	}
+	catch (const logic_error &e) {
+		cerr << "Problem parsing tags: " << e.what() << '\n';
+		return 1;
+	}
+	
+	
 	return 0;
 }
