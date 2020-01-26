@@ -156,9 +156,9 @@
     <ClCompile Include="Tag.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="attributes_test_0.txt" />
+    <Text Include="hard.txt" />
     <Text Include="easy.txt" />
-    <Text Include="tags_test_0.txt" />
+    <Text Include="medium.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attribute.h" />
