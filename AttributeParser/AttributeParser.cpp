@@ -223,21 +223,35 @@ string queryTags(string query, vector<Tag> tags) {
 	return "Not Found!";
 }
 
-int main() {
-	ifstream fileIn("attributes_test_0.txt");
-	string line;
+ifstream createFileStream(string filename) {
+	ifstream fileIn(filename);
+	if (!fileIn.good()) {
+		throw invalid_argument("File " + filename + " does not exist!");
+	}
+	return fileIn;
+}
 
-	// We use a std::vector here, because even though it has O(n) lookup
-	// time, it preserves the order of the tags unlike a map.
-	try {
-		vector<Tag> tags = parseTag(fileIn);
-		printStructure(tags);
-	}
-	catch (const logic_error &e) {
-		cerr << "Problem parsing tags: " << e.what() << '\n';
-		return 1;
-	}
-	
-	
+int main(int argc, char** argv) {
+	// Main loop to process all files input as arguments
+	for (int i = 1; i < argc; i++) {
+		cout << "\n\n>>> Processing file: " << argv[i] << '\n';
+		try {
+			ifstream fileIn = createFileStream(argv[i]);
+
+			// We use a std::vector here, because even though it has O(n) lookup
+			// time, it preserves the order of the tags unlike a map.
+			try {
+				vector<Tag> tags = parseTag(fileIn);
+				printStructure(tags);
+			}
+			catch (const logic_error &e) {
+				cerr << "Problem parsing tags: " << e.what() << '\n';
+				return 1;
+			}
+		}
+		catch (const invalid_argument & e) {
+			cerr << e.what() << '\n';
+		}		
+	}	
 	return 0;
 }

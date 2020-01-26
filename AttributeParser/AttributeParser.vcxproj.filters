@@ -26,13 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="tags_test_0.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="attributes_test_0.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="easy.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="hard.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="medium.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
